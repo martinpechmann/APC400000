@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\Push\ConfigurableButtonElement.py
 from _Framework.ButtonElement import ButtonElement, Color, ON_VALUE, OFF_VALUE
 from _Framework.Skin import Skin, SkinColorMissingError
 # from MatrixMaps import NON_FEEDBACK_CHANNEL
