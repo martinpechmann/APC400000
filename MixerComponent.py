@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\APC40_MkII\MixerComponent.py
 from itertools import ifilter
 from _Framework.Control import RadioButtonControl, control_list
 from _Framework.Dependency import depends
