@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\APC40_MkII\TransportComponent.py
 import Live
 from _Framework.Control import ButtonControl
 from _Framework.SubjectSlot import subject_slot
