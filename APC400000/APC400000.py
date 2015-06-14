@@ -93,7 +93,7 @@ class APC400000(APC, OptimizedControlSurface):
     @contextmanager
     def component_guard(self):
         """ Customized to inject additional things """
-        with super(APSequencer, self).component_guard():
+        with super(APC400000, self).component_guard():
             with self.make_injector().everywhere():
                 yield
 
