@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\_APC\ControlElementUtils.py
 import Live
 MapMode = Live.MidiMap.MapMode
 from _Framework.EncoderElement import EncoderElement
