@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\Push\StepSeqComponent.py
 from __future__ import with_statement
 import Live
 from itertools import chain, starmap, repeat
