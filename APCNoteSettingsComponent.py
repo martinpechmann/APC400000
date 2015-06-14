@@ -1,4 +1,3 @@
-# Embedded file name: c:\Jenkins\live\Binary\Core_Release_32_static\midi-remote-scripts\Push\NoteSettingsComponent.py
 import math
 from functools import partial
 from itertools import imap
