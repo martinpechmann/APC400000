@@ -1,7 +1,7 @@
 # APC400000
 A custom remote script for the APC40 Mk1, incorporating sequencing capabilities from Ableton Push.
 
-This is an adaption of a script by Will Marshall originally for the APC40 Mk2. Requires Live 9.2 or later. For information on how to use the script, refer to the GitHub project page at http://martinpechmann.github.io/APC400000/.
+This is an adaption of a script by Will Marshall originally for the APC40 Mk2, requiring Live 9.2 or higher. For information on how to use the script, refer to the GitHub project page at http://martinpechmann.github.io/APC400000/.
 
 If you have an idea for further extensions to the script, your collaboration is welcome.
 
