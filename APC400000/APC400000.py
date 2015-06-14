@@ -58,7 +58,7 @@ NUM_SCENES = 5
 class APC400000(APC, OptimizedControlSurface):
 
     def __init__(self, *a, **k):
-        super(APSequencer, self).__init__(*a, **k)
+        super(APC400000, self).__init__(*a, **k)
         self._double_press_context = DoublePressContext()
         self._default_skin = make_default_skin()
         self._color_skin = merge_skins(self._default_skin, make_biled_skin())
