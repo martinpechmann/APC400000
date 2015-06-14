@@ -1,4 +1,3 @@
-#Embedded file name: /Users/versonator/Jenkins/live/Binary/Core_Release_64_static/midi-remote-scripts/_APC/SkinDefault.py
 from _Framework.Skin import Skin
 from _Framework.ButtonElement import Color
 from Push.Colors import Rgb, Pulse, Blink
