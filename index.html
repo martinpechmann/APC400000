@@ -33,7 +33,7 @@
         <h3>
 <a id="the-apc400000-controller-script" class="anchor" href="#the-apc400000-controller-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>The APC400000 controller script</h3>
 
-<p>Will Marshall (<a href="https://github.com/willrjmarshall" class="user-mention">@willrjmarshall</a>) has ported many drum sequencing features from Ableton Push to the Akai APC40 MkII. This is an adaption of that script for the original APC40, adding some things such as encoder modes and automation sequencing. Live version 9.2 or higher is required. To install the script, copy the <code>APC400000</code> folder from the downloaded archive to <code>[Live installation directory]\Resources\MIDI Remote Scripts</code>. In order to use the sequencer mode for playing notes into a drum rack, <code>[Track]</code> should be enabled for the APC400000 input in Live's MIDI preferences.</p>
+<p><a href="http://willmarshall.me/portfolio/apc40-mkii-drum-sequencer-free/">Will Marshall has ported</a> many drum sequencing features from Ableton Push to the Akai APC40 MkII. This is an adaption of that script for the original APC40, adding some things such as encoder modes and automation sequencing. Live version 9.2 or higher is required. To install the script, copy the <code>APC400000</code> folder from the downloaded archive to <code>[Live installation directory]\Resources\MIDI Remote Scripts</code>. In order to use the sequencer mode for playing notes into a drum rack, <code>[Track]</code> should be enabled for the APC400000 input in Live's MIDI preferences.</p>
 
 <h3>
 <a id="basic-operation-session-mode" class="anchor" href="#basic-operation-session-mode" aria-hidden="true"><span class="octicon octicon-link"></span></a>Basic Operation (Session Mode)</h3>
@@ -98,10 +98,11 @@
 <h4>
 <a id="selecting-the-loop-length" class="anchor" href="#selecting-the-loop-length" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selecting the loop length</h4>
 
-<p>Copying from the Push manual: The loop length controls allow you to set the length of the clip’s loop and determine which part of it you can see and edit in the step sequencer. Each loop length pad corresponds to a page of steps, and the length of a page depends on the step resolution. When working with drums at the default 16th note resolution, one page of steps is available at a time, for a total of one bar. To change the loop length, hold one pad and then tap another pad (or,
-to set the loop length to exactly one page, quickly double-tap the corresponding pad.)</p>
+<p>(The following is taken from the Push manual.) The loop length controls allow you to set the length of the clip’s loop and determine which part of it you can see and edit in the step sequencer. Each loop length pad corresponds to a page of steps, and the length of a page depends on the step resolution. When working with drums at the default 16th note resolution, one page of steps is available at a time, for a total of one bar. To change the loop length, hold one pad and then tap another pad (or, to set the loop length to exactly one page, quickly double-tap the corresponding pad.)</p>
 
 <p>Note that the page you see is not necessarily the page you hear. When you set the loop length, the pages will update so that the current play position (as indicated by the moving blinking pad in the loop selection section) always remains visible. But in some cases, you may want to disable this auto-follow behavior. For example, you may want to edit a single page of a longer loop, while still allowing the loop to play for the length you set. To do this, single-tap the pad that corresponds to that page. This will “lock” the view to that page without changing the loop length. To then turn auto-follow back on, simply reselect the current loop. (Note that single-tapping a page that is outside of the current loop will immediately set the loop to that page.)</p>
+
+<p>When the view is locked to a specific page, holding <code>Shift</code> will display a finer grained loop selector spanning the lower right 4x4 matrix of clip launch buttons.</p>
 
 <h4>
 <a id="the-step-entry-section" class="anchor" href="#the-step-entry-section" aria-hidden="true"><span class="octicon octicon-link"></span></a>The step entry section</h4>
@@ -134,6 +135,7 @@ to set the loop length to exactly one page, quickly double-tap the corresponding
 <li><p>Sequencing for instrument (synthesizer) tracks is not natively supported, however there is a workaround: You can group your synthesizer in an insturment rack and add an empty drum rack as a second chain. This way, the track is recognized as a drum track and 16 chromatic steps are visible/playable at a time.</p></li>
 <li><p>In principle, automation sequencing ought to work the same way even for audio tracks. At the moment though, this is not properly implemented.</p></li>
 <li><p>The idea and implementation of using the track encoders for controlling a second device is mainly taken from Hanz Petrov's <a href="http://remotescripts.blogspot.de/p/apc-64-40.html">APC64-40 script</a>.</p></li>
+<li><p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=P84ZBFYV5SAKL">Donations are welcome!</a></p></li>
 </ul>
       </section>
       <footer>
