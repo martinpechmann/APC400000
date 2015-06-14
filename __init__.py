@@ -1,5 +1,5 @@
 from _Framework.Capabilities import CONTROLLER_ID_KEY, PORTS_KEY, NOTES_CC, SCRIPT, SYNC, REMOTE, controller_id, inport, outport
-from APSequencer import APSequencer
+from APC400000 import APC400000
 
 def create_instance(c_instance):
     return APC400000(c_instance)
