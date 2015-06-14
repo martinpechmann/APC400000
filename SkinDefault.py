@@ -9,15 +9,15 @@ RED_BLINK = Color(4)
 AMBER = Color(5)
 
 class Defaults:
-  class DefaultButton:
-    On = Color(127)
-    Off = Color(0)
+    class DefaultButton:
+        On = Color(1)
+        Off = Color(0)
+        Disabled = Color(0)
+        Alert = Color(2)
 
 
 class BiLedColors:
-    class DefaultButton:
-      On = Color(127)
-      Off = Color(0)
+
     class Session:
         ClipStopped = AMBER
         ClipStarted = GREEN
@@ -37,6 +37,53 @@ class BiLedColors:
         Stopped = RED
         Playing = GREEN
         Empty = Color(0)
+
+    class DrumGroup:
+        PadSelected = RED
+        PadSelectedNotSoloed = RED
+        PadFilled = GREEN
+        PadEmpty = Color(0)
+        PadMuted = AMBER
+        PadMutedSelected = GREEN_BLINK
+        PadSoloed = RED
+        PadSoloedSelected = RED_BLINK
+        PadInvisible = Color(0)
+        PadAction = RED
+
+    class LoopSelector:
+        Playhead = GREEN_BLINK
+        PlayheadRecord = RED_BLINK
+        SelectedPage = RED
+        InsideLoopStartBar = GREEN
+        InsideLoop = AMBER
+        OutsideLoop = Color(0)
+
+    class NoteEditor:
+        class Step:
+            Empty = Color(0)
+            Low = AMBER
+            Medium = GREEN
+            High = GREEN
+            Full = RED
+            Muted = AMBER
+        class StepEditing:
+            Low = AMBER
+            High = GREEN
+            Full = RED
+            Muted = AMBER
+        StepSelected = RED
+        StepEmpty = Color(0)
+        StepEmptyBase = Color(0)
+        StepEmptyScale = Color(0)
+        StepDisabled = GREEN_BLINK
+        Playhead = GREEN_BLINK
+        PlayheadRecord = RED_BLINK
+        QuantizationSelected = GREEN
+        QuantizationUnselected = Color(0)
+        NoteBase = Color(0)
+        NoteScale = Color(0)
+        NoteNotScale = Color(0)
+        NoteInvalid = GREEN_BLINK
 
 
 class RgbColors:
@@ -112,6 +159,10 @@ class StopButtons:
     class Session:
         StopClip = Color(1)
         StopClipTriggered = Color(2)
+
+    class NoteEditor:
+        QuantizationSelected = GREEN
+        QuantizationUnselected = Color(0)
 
 
 class CrossfadeButtons:

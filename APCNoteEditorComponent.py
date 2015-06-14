@@ -3,6 +3,10 @@ from itertools import chain, imap, ifilter
 from _Framework.SubjectSlot import subject_slot, subject_slot_group
 from Push.NoteEditorComponent import NoteEditorComponent, most_significant_note
 from APCMessenger import APCMessenger
+from MatrixMaps import PAD_FEEDBACK_CHANNELS
+from _Framework import Task, Defaults
+from _Framework.Util import first, product
+from functools import partial
 
 def color_for_note(note):
   velocity = note[3]
@@ -15,9 +19,9 @@ def color_for_note(note):
     elif velocity >= 62:
       return 'Medium'
     elif velocity >= 31:
-      return "Low"
+      return 'Low'
     else:
-      return 'Empty'
+      return 'Low'
   else:
     return 'Muted'
 
@@ -58,42 +62,42 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
     return False
 
 
-  def _update_editor_matrix(self):
-    """
-    update offline array of button LED values, based on note
-    velocity and mute states
-    """
-    step_colors = ['NoteEditor.StepDisabled'] * self._get_step_count()
-    width = self._width
-    coords_to_index = lambda (x, y): x + y * width
-    editing_indices = set(map(coords_to_index, self._modified_steps))
-    selected_indices = set(map(coords_to_index, self._pressed_steps))
-    last_editing_notes = []
-    for time_step, index in self._visible_steps():
-      notes = time_step.filter_notes(self._clip_notes)
-      if len(notes) > 0:
-        last_editing_notes = []
-        if index in selected_indices:
-          color = 'NoteEditor.StepSelected'
-        elif index in editing_indices:
-          note_color = color_for_note(most_significant_note(notes))
-          color = 'NoteEditor.StepEditing.' + note_color
-          last_editing_notes = notes
-        else:
-          note_color = color_for_note(most_significant_note(notes))
-          color = 'NoteEditor.Step.' + note_color
-      elif any(imap(time_step.overlaps_note, last_editing_notes)):
-        color = 'NoteEditor.StepEditing.' + note_color
-      elif index in editing_indices or index in selected_indices:
-        color = 'NoteEditor.StepSelected'
-        last_editing_notes = []
-      else:
-        color = self.background_color
-        last_editing_notes = []
-      step_colors[index] = color
+  # def _update_editor_matrix(self):
+  #   """
+  #   update offline array of button LED values, based on note
+  #   velocity and mute states
+  #   """
+  #   step_colors = ['NoteEditor.StepDisabled'] * self._get_step_count()
+  #   width = self._width
+  #   coords_to_index = lambda (x, y): x + y * width
+  #   editing_indices = set(map(coords_to_index, self._modified_steps))
+  #   selected_indices = set(map(coords_to_index, self._pressed_steps))
+  #   last_editing_notes = []
+  #   for time_step, index in self._visible_steps():
+  #     notes = time_step.filter_notes(self._clip_notes)
+  #     if len(notes) > 0:
+  #       last_editing_notes = []
+  #       if index in selected_indices:
+  #         color = 'NoteEditor.StepSelected'
+  #       elif index in editing_indices:
+  #         note_color = color_for_note(most_significant_note(notes))
+  #         color = 'NoteEditor.StepEditing.' + note_color
+  #         last_editing_notes = notes
+  #       else:
+  #         note_color = color_for_note(most_significant_note(notes))
+  #         color = 'NoteEditor.Step.' + note_color
+  #     elif any(imap(time_step.overlaps_note, last_editing_notes)):
+  #       color = 'NoteEditor.StepEditing.' + note_color
+  #     elif index in editing_indices or index in selected_indices:
+  #       color = 'NoteEditor.StepSelected'
+  #       last_editing_notes = []
+  #     else:
+  #       color = self.background_color
+  #       last_editing_notes = []
+  #     step_colors[index] = color
 
-    self._step_colors = step_colors
-    self._update_editor_matrix_leds()
+  #   self._step_colors = step_colors
+  #   self._update_editor_matrix_leds()
 
   def _visible_steps(self):
     """ Patched to support four-wide """
@@ -131,3 +135,28 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
   def update(self):
     super(NoteEditorComponent, self).update()
     self._update_velocity_slider()
+
+  def set_button_matrix(self, matrix):
+    last_page_length = self.page_length
+    self._matrix = matrix
+    self._on_matrix_value.subject = matrix
+    if matrix:
+      self._width = matrix.width()
+      self._height = matrix.height()
+      matrix.reset()
+      for button, (col, _) in ifilter(first, matrix.iterbuttons()):
+        button.set_channel(PAD_FEEDBACK_CHANNELS[col] + 4)
+
+    for task in self._step_tap_tasks.itervalues():
+      task.kill()
+
+    def trigger_modification_task(x, y):
+      trigger = partial(self._trigger_modification, (x, y), done=True)
+      return self._tasks.add(Task.sequence(Task.wait(Defaults.MOMENTARY_DELAY), Task.run(trigger))).kill()
+
+    self._step_tap_tasks = dict([ ((x, y), trigger_modification_task(x, y)) for x, y in product(xrange(self._width), xrange(self._height)) ])
+    if matrix and last_page_length != self.page_length:
+      self._on_clip_notes_changed()
+      self.notify_page_length()
+    else:
+      self._update_editor_matrix()

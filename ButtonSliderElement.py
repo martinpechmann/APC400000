@@ -1,12 +1,19 @@
-from _Framework.ButtonSliderElement import ButtonSliderElement
+from _Framework.ButtonSliderElement import ButtonSliderElement as ButtonSliderElementBase
 from Push.Colors import Rgb
 
-class ButtonSliderElement(ButtonSliderElement):
+class ButtonSliderElement(ButtonSliderElementBase):
   """ Fixes the broken scaling code on the _Framework example
   caused by odd numbers of buttons 
   
   Also adds force_send
   """
+
+  def disconnect(self):
+    super(ButtonSliderElementBase, self).disconnect()
+    for button in self._buttons:
+      button.turn_off()
+    self._buttons = None
+    return
 
   def send_value(self, value, force_send = False):
     if force_send or value != self._last_sent_value:
@@ -23,7 +30,7 @@ class ButtonSliderElement(ButtonSliderElement):
 
   def _button_color(self, index):
     return "NoteEditor.Step." + [
-      "Empty",
+      "Low",
       "Low",
       "Medium",
       "High",
