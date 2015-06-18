@@ -114,6 +114,8 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
       self.set_enabled(True)
       self.update()
     else:
+      if hasattr(self, "_velocity_slider") and self._velocity_slider:
+        self._velocity_slider.send_value(0, force_send = True)
       self.set_enabled(False)
 
   def set_velocity_slider(self, button_slider):
@@ -124,12 +126,15 @@ class APCNoteEditorComponent(NoteEditorComponent, APCMessenger):
     self._update_velocity_slider()
 
   def _update_velocity_slider(self):
-    if hasattr(self, "_velocity_slider") and self._velocity_slider:
+    if hasattr(self, "_velocity_slider") and self._velocity_slider and self.is_enabled():
       self._velocity_slider.send_value(self._velocity, force_send = True)
   
   @subject_slot("value")
   def _on_velocity_changed(self, value):
-    self._velocity = value
+    if value > 0:
+      self._velocity = value
+    else:
+      self._velocity = 1
     self._update_velocity_slider()
 
   def update(self):
