@@ -134,7 +134,8 @@
 <a id="notes" class="anchor" href="#notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes</h3>
 
 <ul>
-<li><p>Sequencing for instrument (synthesizer) tracks is not natively supported, however there is a workaround: You can group your synthesizer in an instrument rack and add an empty drum rack as a second chain. This way, the track is recognized as a drum track and 16 chromatic steps are visible/playable at a time.</p></li>
+<li><p>Known Issue: Simultaneously playing two drum pads that are on the same row can lead to notes getting stuck. This seems to be due to how Live handles MIDI data from the APC and probably can't be fixed in the remote script.</p></li>
+<li><p>Sequencing for instrument (synthesizer) tracks is not natively supported, however there is a workaround: You can group your synthesizer in an instrument rack and add an empty drum rack as a second chain. This way, the track is recognized as a drum track and 16 chromatic steps are visible/playable at a time. Unfortunately, as long as the issue mentioned above is not fixed, this is only really useful for monophonic playing.</p></li>
 <li><p>In principle, automation sequencing ought to work the same way even for audio tracks. At the moment though, this is not properly implemented.</p></li>
 <li><p>The idea and implementation of using the track encoders for controlling a second device is mainly taken from Hanz Petrov's <a href="http://remotescripts.blogspot.de/p/apc-64-40.html">APC64-40 script</a>.</p></li>
 <li><p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=P84ZBFYV5SAKL">Donations are welcome!</a></p></li>
