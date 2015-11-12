@@ -8,10 +8,10 @@ from _Framework.SubjectSlot import subject_slot, Subject, subject_slot_group
 from _Framework.Util import forward_property, find_if
 from _Framework.Layer import Layer
 
-from Push.LoopSelectorComponent import LoopSelectorComponent
-from Push.NoteEditorPaginator import NoteEditorPaginator
-from Push.PlayheadComponent import PlayheadComponent
-from Push.StepSeqComponent import DrumGroupFinderComponent, find_instrument_devices, find_drum_group_device
+from LoopSelectorComponent import LoopSelectorComponent
+from NoteEditorPaginator import NoteEditorPaginator
+from PlayheadComponent import PlayheadComponent
+from StepSeqComponent import DrumGroupFinderComponent, find_instrument_devices, find_drum_group_device
 
 from APCDrumGroupComponent import APCDrumGroupComponent as DrumGroupComponent
 from APCNoteEditorComponent import APCNoteEditorComponent as NoteEditorComponent

@@ -7,10 +7,10 @@ from _Framework.DisplayDataSource import DisplayDataSource
 from _Framework.ModesComponent import ModesComponent, Mode, AddLayerMode
 from _Framework.Util import find_if, forward_property, chain_from_iterable, sign, clamp
 from _Framework import Task, Defaults
-from Push.AutomationComponent import AutomationComponent
-from Push.ActionWithOptionsComponent import OptionsComponent
-from Push.Setting import EnumerableSetting
-from Push.consts import CHAR_ELLIPSIS, GRAPH_VOL
+from AutomationComponent import AutomationComponent
+from ActionWithOptionsComponent import OptionsComponent
+from Setting import EnumerableSetting
+from consts import CHAR_ELLIPSIS, GRAPH_VOL
 from APCMessenger import APCMessenger
 
 class NoteSetting(SlotManager, Subject):

@@ -19,9 +19,9 @@ from _Framework.SessionZoomingComponent import SessionZoomingComponent
 from _Framework.Skin import merge_skins
 from _Framework.Util import const, recursive_map
 
-from Push.Actions import DuplicateLoopComponent, UndoRedoComponent
-from Push.AutoArmComponent import AutoArmComponent
-from Push.GridResolution import GridResolution
+from Actions import DuplicateLoopComponent, UndoRedoComponent
+from AutoArmComponent import AutoArmComponent
+from GridResolution import GridResolution
 
 # from _APC.APC import APC
 from _APC.DeviceBankButtonElement import DeviceBankButtonElement
