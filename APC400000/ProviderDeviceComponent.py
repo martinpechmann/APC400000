@@ -1,4 +1,4 @@
-from _APC.DeviceComponent import DeviceComponent
+from DeviceComponent import DeviceComponent
 from _Framework.SubjectSlot import Subject
 
 class ProviderDeviceComponent(DeviceComponent, Subject):

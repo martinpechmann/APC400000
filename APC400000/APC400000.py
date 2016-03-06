@@ -18,6 +18,7 @@ from _Framework.SessionRecordingComponent import SessionRecordingComponent
 from _Framework.SessionZoomingComponent import SessionZoomingComponent
 from _Framework.Skin import merge_skins
 from _Framework.Util import const, recursive_map
+# from _Framework.EncoderElement import FineGrainWithModifierEncoderElement
 
 from Actions import DuplicateLoopComponent, UndoRedoComponent
 from AutoArmComponent import AutoArmComponent
@@ -44,7 +45,8 @@ from TransportComponent import TransportComponent
 
 from APCNoteSettingsComponent import NoteEditorSettingsComponent
 from APCStepSeqComponent import APCStepSeqComponent as StepSeqComponent
-# from APCPlayheadElement import APCPlayheadElement as PlayheadElement
+
+from PlayheadElement import PlayheadElement
 
 # Monkeypatch things
 # import ControlElementUtils
@@ -129,6 +131,8 @@ class APC400000(APC, OptimizedControlSurface):
         self._send_b_button = make_on_off_button(0, 89, name='Send_B_Button')
         self._send_c_button = make_on_off_button(0, 90, name='Send_C_Button')
         self._mixer_encoders = ButtonMatrixElement(rows=[[ make_ring_encoder(48 + track, 56 + track, name='Track_Control_%d' % track) for track in xrange(NUM_TRACKS) ]], name="Track_Controls")
+        # self._mixer_encoders_raw = [ make_ring_encoder(48 + track, 56 + track, name='Track_Control_%d' % track) for track in xrange(NUM_TRACKS) ]
+        # self._mixer_encoders = ButtonMatrixElement(rows=[[FineGrainWithModifierEncoderElement(encoder, self._shift_button) for encoder in self._mixer_encoders_raw]], name="Track_Controls")
         self._volume_controls = ButtonMatrixElement(rows=[[ make_slider(track, 7, name='%d_Volume_Control' % track) for track in xrange(NUM_TRACKS) ]])
         self._master_volume_control = make_slider(0, 14, name='Master_Volume_Control')
         self._prehear_control = make_encoder(0, 47, name='Prehear_Volume_Control')
@@ -175,7 +179,7 @@ class APC400000(APC, OptimizedControlSurface):
         self._double_press_event_matrix = ButtonMatrixElement(name='Double_Press_Event_Matrix', rows=recursive_map(lambda x: x.double_press, self._double_press_rows))
         self._velocity_slider = ButtonSliderElement(tuple(self._scene_launch_buttons_raw[::-1]))
         self._grid_resolution = GridResolution()
-        # self._playhead_element = PlayheadElement(self._c_instance.playhead)
+        self._playhead_element = PlayheadElement(self._c_instance.playhead)
         # self._playhead_element.name = 'Playhead_Element'
         # self._playhead_element.proxied_object = self._c_instance.playhead
 
@@ -301,11 +305,13 @@ class APC400000(APC, OptimizedControlSurface):
             select_button = self._stop_all_button,
             # mute_button = self._send_b_button,
             # delete_button = self._send_c_button,
-            # playhead = self._playhead_element,
+            playhead = self._playhead_element,
             quantization_buttons = self._stop_buttons,
             shift_button = self._shift_button,
             loop_selector_matrix = self._double_press_matrix.submatrix[:8, :1],
             short_loop_selector_matrix = self._double_press_event_matrix.submatrix[:8, :1],
+            prev_loop_page_button = self._left_button,
+            next_loop_page_button = self._right_button,
             drum_bank_detail_up_button = self._with_shift(self._up_button),
             drum_bank_detail_down_button = self._with_shift(self._down_button),
             drum_bank_up_button = self._up_button,
@@ -369,13 +375,13 @@ class APC400000(APC, OptimizedControlSurface):
   
     # def update(self):
     #     self.reset_controlled_track()
-    #     super(APSequencer, self).update()
+    #     super(APC400000, self).update()
 
     # def _on_selected_track_changed(self):
     #     self.reset_controlled_track()
     #     if self._auto_arm.needs_restore_auto_arm:
     #         self.schedule_message(1, self._auto_arm.restore_auto_arm)
-    #     super(APSequencer, self)._on_selected_track_changed()
+    #     super(APC400000, self)._on_selected_track_changed()
 
     def _restore_auto_arm(self):
         if self._auto_arm.needs_restore_auto_arm:

@@ -1,35 +1,106 @@
+# Embedded file name: c:\Jenkins\live\output\win_32_static\Release\midi-remote-scripts\Push\StepSeqComponent.py
 from __future__ import with_statement
 import Live
-from itertools import chain, starmap, repeat
-from _Framework.ClipCreator import ClipCreator
+from itertools import imap, chain, starmap
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
 from _Framework.CompoundComponent import CompoundComponent
 from _Framework.SubjectSlot import subject_slot, Subject, subject_slot_group
 from _Framework.Util import forward_property, find_if
-from _Framework.Layer import Layer
-
+from DrumGroupComponent import DrumGroupComponent
+from NoteEditorComponent import NoteEditorComponent
 from LoopSelectorComponent import LoopSelectorComponent
-from NoteEditorPaginator import NoteEditorPaginator
 from PlayheadComponent import PlayheadComponent
-from StepSeqComponent import DrumGroupFinderComponent, find_instrument_devices, find_drum_group_device
+from NoteEditorPaginator import NoteEditorPaginator
 
-from APCDrumGroupComponent import APCDrumGroupComponent as DrumGroupComponent
-from APCNoteEditorComponent import APCNoteEditorComponent as NoteEditorComponent
-from APCMessenger import APCMessenger
+class DrumGroupFinderComponent(ControlSurfaceComponent, Subject):
+    """
+    Looks in the hierarchy of devices of the selected track, looking
+    for the first available drum-rack (deep-first), updating as the
+    device list changes.
+    """
+    __subject_events__ = ('drum_group',)
+    _drum_group = None
+
+    @property
+    def drum_group(self):
+        """
+        The latest found drum rack.
+        """
+        return self._drum_group
+
+    @property
+    def root(self):
+        """
+        The currently observed track.
+        """
+        return self.song().view.selected_track
+
+    @subject_slot_group('devices')
+    def _on_devices_changed(self, chain):
+        self.update()
+
+    @subject_slot_group('chains')
+    def _on_chains_changed(self, chain):
+        self.update()
+
+    def on_selected_track_changed(self):
+        self.update()
+
+    def update(self):
+        super(DrumGroupFinderComponent, self).update()
+        if self.is_enabled():
+            self._update_listeners()
+            self._update_drum_group()
+
+    def _update_listeners(self):
+        root = self.root
+        devices = list(find_instrument_devices(root))
+        chains = list(chain([root], *[ d.chains for d in devices ]))
+        self._on_chains_changed.replace_subjects(devices)
+        self._on_devices_changed.replace_subjects(chains)
+
+    def _update_drum_group(self):
+        drum_group = find_drum_group_device(self.root)
+        if type(drum_group) != type(self._drum_group) or drum_group != self._drum_group:
+            self._drum_group = drum_group
+            self.notify_drum_group()
 
 
-class APCStepSeqComponent(CompoundComponent, APCMessenger):
+def find_instrument_devices(track_or_chain):
+    """
+    Returns a list with all instrument rack descendants from a track
+    or chain.
+    """
+    instrument = find_if(lambda d: d.type == Live.Device.DeviceType.instrument, track_or_chain.devices)
+    if instrument and not instrument.can_have_drum_pads:
+        if instrument.can_have_chains:
+            return chain([instrument], *imap(find_instrument_devices, instrument.chains))
+    return []
+
+
+def find_drum_group_device(track_or_chain):
+    """
+    Looks up recursively for a drum_group device in the track.
+    """
+    instrument = find_if(lambda d: d.type == Live.Device.DeviceType.instrument, track_or_chain.devices)
+    if instrument:
+        if instrument.can_have_drum_pads:
+            return instrument
+        elif instrument.can_have_chains:
+            return find_if(bool, imap(find_drum_group_device, instrument.chains))
+    return None
+
+
+class StepSeqComponent(CompoundComponent):
     """ Step Sequencer Component """
 
-    def __init__(self, clip_creator = ClipCreator(), skin = None, grid_resolution = None, note_editor_settings = None, *a, **k):
-        super(APCStepSeqComponent, self).__init__(*a, **k)
-        if not clip_creator:
-            raise AssertionError
+    def __init__(self, clip_creator = None, skin = None, grid_resolution = None, note_editor_settings = None, *a, **k):
+        super(StepSeqComponent, self).__init__(*a, **k)
+        if not clip_creator: raise AssertionError
         if not skin:
             raise AssertionError
         self._grid_resolution = grid_resolution
-        if note_editor_settings:
-            self.register_component(note_editor_settings)
+        note_editor_settings and self.register_component(note_editor_settings)
         self._note_editor, self._loop_selector, self._big_loop_selector, self._drum_group = self.register_components(NoteEditorComponent(settings_mode=note_editor_settings, clip_creator=clip_creator, grid_resolution=self._grid_resolution), LoopSelectorComponent(clip_creator=clip_creator), LoopSelectorComponent(clip_creator=clip_creator, measure_length=2.0), DrumGroupComponent())
         self._paginator = NoteEditorPaginator([self._note_editor])
         self._big_loop_selector.set_enabled(False)
@@ -44,39 +115,16 @@ class APCStepSeqComponent(CompoundComponent, APCMessenger):
         self._on_detail_clip_changed.subject = self.song().view
         self._detail_clip = None
         self._playhead = None
-        # self._playhead_component = self.register_component(PlayheadComponent(grid_resolution=grid_resolution, paginator=self._paginator, follower=self._loop_selector, notes=chain(*starmap(repeat, ((54, 4),
-        #  (55, 4),
-         # (56, 4),
-         # (57, 4)))), triplet_notes=chain(*starmap(repeat, ((54, 3),
-         # (55, 3),
-         # (56, 3),
-         # (57, 3)))), channels=repeat(range(4,8),4), triplet_channels=repeat(range(4,7),4)))
-        self._playhead_component = self.register_component(PlayheadComponent(grid_resolution=grid_resolution, paginator=self._paginator, follower=self._loop_selector, notes=chain(*starmap(repeat, ((54, 4),
-         (55, 4),
-         (56, 4),
-         (57, 4)))), triplet_notes=chain(*starmap(repeat, ((54, 3),
-         (55, 3),
-         (56, 3),
-         (57, 3)))), feedback_channels=(range(4,8))))
+        self._playhead_component = self.register_component(PlayheadComponent(grid_resolution=grid_resolution, paginator=self._paginator, follower=self._loop_selector, notes=chain(*starmap(range, ((92, 100),
+         (84, 92),
+         (76, 84),
+         (68, 76)))), triplet_notes=chain(*starmap(range, ((92, 98),
+         (84, 90),
+         (76, 82),
+         (68, 74))))))
         self._skin = skin
         self._playhead_color = 'NoteEditor.Playhead'
-        self._setup_drum_group_finder()
         return
-
-    def _setup_drum_group_finder(self):
-        self._drum_group_finder = DrumGroupFinderComponent()
-        self._on_drum_group_changed.subject = self._drum_group_finder
-        self._drum_group_finder.update()
-
-    @subject_slot('drum_group')
-    def _on_drum_group_changed(self):
-        self.set_drum_group_device(self._drum_group_finder.drum_group)
-
-    def on_selected_track_changed(self):
-        self.set_drum_group_device(self._drum_group_finder.drum_group)
-
-    def set_velocity_slider(self, button_slider):
-        self._note_editor.set_velocity_slider(button_slider)
 
     def set_playhead(self, playhead):
         self._playhead = playhead
@@ -100,8 +148,7 @@ class APCStepSeqComponent(CompoundComponent, APCMessenger):
             self._playhead.velocity = int(self._skin[self._playhead_color])
 
     def set_drum_group_device(self, drum_group_device):
-        if (drum_group_device and not drum_group_device.can_have_drum_pads):
-            raise AssertionError
+        if drum_group_device and not drum_group_device.can_have_drum_pads: raise AssertionError
         self._drum_group.set_drum_group_device(drum_group_device)
         self._on_selected_drum_pad_changed.subject = drum_group_device.view if drum_group_device else None
         self._on_selected_drum_pad_changed()
@@ -193,7 +240,7 @@ class APCStepSeqComponent(CompoundComponent, APCMessenger):
         pass
 
     def update(self):
-        super(APCStepSeqComponent, self).update()
+        super(StepSeqComponent, self).update()
         self._on_detail_clip_changed()
         self._update_playhead_color()
 

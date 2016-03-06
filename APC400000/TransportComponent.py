@@ -20,9 +20,9 @@ class TransportComponent(TransportComponentBase):
     def set_tempo_encoder(self, control):
         if not (not control or control.message_map_mode() in (Live.MidiMap.MapMode.relative_smooth_two_compliment, Live.MidiMap.MapMode.relative_two_compliment)):
             raise AssertionError
-            self._tempo_encoder_control = control != self._tempo_encoder_control and control
-            self._tempo_encoder_value.subject = control
-            self.update()
+        self._tempo_encoder_control = control != self._tempo_encoder_control and control
+        self._tempo_encoder_value.subject = control
+        self.update()
 
     @subject_slot('value')
     def _tempo_encoder_value(self, value):

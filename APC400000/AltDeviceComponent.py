@@ -20,10 +20,9 @@ class AltDeviceComponent(DeviceComponent):
         return
 
     def _lock_value(self, value):
-        if not self._lock_button != None:
-            raise AssertionError
-            raise value != None or AssertionError
-            raise isinstance(value, int) or AssertionError
+        if self._lock_button == None: raise AssertionError
+        if value == None: raise AssertionError
+        if not isinstance(value, int): raise AssertionError
         if self._device != None and (not self._lock_button.is_momentary() or value is not 0):
             self._locked_to_device = not self._locked_to_device
             self._update_lock_button()
