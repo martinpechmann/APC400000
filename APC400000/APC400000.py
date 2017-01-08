@@ -259,7 +259,7 @@ class APC400000(APC, OptimizedControlSurface):
 
     def _create_device(self):
         #self._device = DeviceComponent(name='Device', is_enabled=False, layer=Layer(parameter_controls=self._device_controls, bank_buttons=self._device_bank_buttons, bank_prev_button=self._device_prev_bank_button, bank_next_button=self._device_next_bank_button, on_off_button=self._device_on_off_button, lock_button=self._device_lock_button))
-        self._device = ProviderDeviceComponent(name='Device', is_enabled=False, layer=Layer(parameter_controls=self._device_controls, bank_buttons=self._device_bank_buttons, bank_prev_button=self._device_prev_bank_button, bank_next_button=self._device_next_bank_button, on_off_button=self._device_on_off_button, lock_button=self._device_lock_button))
+        self._device = ProviderDeviceComponent(name='Device', is_enabled=False, device_selection_follows_track_selection=True, layer=Layer(parameter_controls=self._device_controls, bank_buttons=self._device_bank_buttons, bank_prev_button=self._device_prev_bank_button, bank_next_button=self._device_next_bank_button, on_off_button=self._device_on_off_button, lock_button=self._device_lock_button))
         self._alt_device = AltDeviceComponent(self, name='Alt_Device', is_enabled=False)
 
     def _create_view_control(self):
